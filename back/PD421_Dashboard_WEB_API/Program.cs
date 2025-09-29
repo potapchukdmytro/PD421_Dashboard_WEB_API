@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using PD421_Dashboard_WEB_API.BLL.Services.Auth;
 using PD421_Dashboard_WEB_API.BLL.Services.Genre;
 using PD421_Dashboard_WEB_API.BLL.Settings;
@@ -9,6 +9,7 @@ using PD421_Dashboard_WEB_API.DAL.Entitites.Identity;
 using PD421_Dashboard_WEB_API.DAL.Initializer;
 using PD421_Dashboard_WEB_API.DAL.Repositories.Game;
 using PD421_Dashboard_WEB_API.DAL.Repositories.Genre;
+using PD421_Dashboard_WEB_API.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -86,6 +87,9 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.UseCors(corsName);
+
+// static files
+app.AddStaticFiles(app.Environment);
 
 app.Seed();
 
