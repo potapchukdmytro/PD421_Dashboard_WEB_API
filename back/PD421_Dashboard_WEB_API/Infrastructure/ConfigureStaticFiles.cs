@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.FileProviders;
+using PD421_Dashboard_WEB_API.Settings;
 
 namespace PD421_Dashboard_WEB_API.Infrastructure
 {
@@ -7,8 +8,8 @@ namespace PD421_Dashboard_WEB_API.Infrastructure
         public static void AddStaticFiles(this IApplicationBuilder app, IWebHostEnvironment environment)
         {
             string rootPath = environment.ContentRootPath;
-            string storagePath = Path.Combine(rootPath, "storage");
-            string imagesPath = Path.Combine(storagePath, "images");
+            string storagePath = Path.Combine(rootPath, StaticFilesSettings.StorageDirectory);
+            string imagesPath = Path.Combine(storagePath, StaticFilesSettings.ImagesDirectory);
 
             if (!Directory.Exists(imagesPath))
             {

@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using PD421_Dashboard_WEB_API.BLL.Services.Auth;
+using PD421_Dashboard_WEB_API.BLL.Services.Game;
 using PD421_Dashboard_WEB_API.BLL.Services.Genre;
+using PD421_Dashboard_WEB_API.BLL.Services.Storage;
 using PD421_Dashboard_WEB_API.BLL.Settings;
 using PD421_Dashboard_WEB_API.DAL;
 using PD421_Dashboard_WEB_API.DAL.Entitites.Identity;
@@ -53,6 +55,8 @@ builder.Services.AddScoped<IGenreRepository, GenreRepository>();
 // Add services
 builder.Services.AddScoped<IGenreService, GenreService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IGameService, GameService>();
+builder.Services.AddScoped<IStorageService, StorageService>();
 
 // Add settings
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
