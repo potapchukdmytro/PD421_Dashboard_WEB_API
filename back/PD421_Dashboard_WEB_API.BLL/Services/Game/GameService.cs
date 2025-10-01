@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using PD421_Dashboard_WEB_API.BLL.Dtos.Game;
 using PD421_Dashboard_WEB_API.BLL.Services.Storage;
 using PD421_Dashboard_WEB_API.DAL.Entitites;
@@ -73,6 +74,21 @@ namespace PD421_Dashboard_WEB_API.BLL.Services.Game
             return new ServiceResponse
             {
                 Message = $"Гру '{entity.Name}' успішно додано"
+            };
+        }
+
+        public async Task<ServiceResponse> GetAllAsync()
+        {
+            var entities = await _gameRepository.Games
+                .Include(g => g.Images)
+                .ToListAsync();
+
+            var dtos = _mapper.Map<List<GameDto>>(entities);
+
+            return new ServiceResponse
+            {
+                Message = "Ігри отримано",
+                Data = dtos
             };
         }
     }

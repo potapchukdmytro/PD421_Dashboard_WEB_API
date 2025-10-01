@@ -27,5 +27,13 @@ namespace PD421_Dashboard_WEB_API.Controllers
             var response = await _gameService.CreateAsync(dto, imagesPath);
             return this.ToActionResult(response);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAsync()
+        {
+            var response = await _gameService.GetAllAsync();
+            return this.ToActionResult(response);
+        }
+
     }
 }

@@ -6,6 +6,7 @@ import LoginPage from "./pages/loginPage/LoginPage";
 import { useEffect } from "react";
 import { loginSucess } from "./store/slices/authSlice";
 import { useDispatch } from "react-redux";
+import GameListPage from "./pages/gamePage/GameListPage";
 
 function App() {
     const dispatch = useDispatch();
@@ -24,6 +25,7 @@ function App() {
                 <Route path="/" element={<DefaultLayout />}>
                     <Route index element={<MainPage />} />
                     <Route path="/login" element={<LoginPage />} />
+                    <Route path="/game" element={<GameListPage />} />
                 </Route>
             </Routes>
         </>

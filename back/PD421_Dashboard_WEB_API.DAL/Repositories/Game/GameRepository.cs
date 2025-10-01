@@ -7,5 +7,7 @@ namespace PD421_Dashboard_WEB_API.DAL.Repositories.Game
     {
         public GameRepository(AppDbContext context)
             : base(context) { }
+
+        public IQueryable<GameEntity> Games => GetAll();
     }
 }

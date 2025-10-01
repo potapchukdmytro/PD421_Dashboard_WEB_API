@@ -17,7 +17,11 @@ import { useAppSelector } from "../../hooks/reduxHooks";
 import { useDispatch } from "react-redux";
 import { logout } from "../../store/slices/authSlice";
 
-const pages = ["Products", "Pricing", "Blog"];
+const pages = [
+    { title: "Games", url: "/game" },
+    { title: "Pricing", url: "/" },
+    { title: "Blog", url: "/" },
+];
 const settings = ["Profile", "Account", "Dashboard"];
 
 const Navbar: React.FC = () => {
@@ -44,7 +48,7 @@ const Navbar: React.FC = () => {
 
     const handleLogout = () => {
         dispatch(logout());
-    }
+    };
 
     return (
         <AppBar position="static">
@@ -105,12 +109,16 @@ const Navbar: React.FC = () => {
                         >
                             {pages.map((page) => (
                                 <MenuItem
-                                    key={page}
+                                    key={page.title}
                                     onClick={handleCloseNavMenu}
                                 >
-                                    <Typography sx={{ textAlign: "center" }}>
-                                        {page}
-                                    </Typography>
+                                    <Link to={page.url}>
+                                        <Typography
+                                            sx={{ textAlign: "center" }}
+                                        >
+                                            {page.title}
+                                        </Typography>
+                                    </Link>
                                 </MenuItem>
                             ))}
                         </Menu>
@@ -143,13 +151,18 @@ const Navbar: React.FC = () => {
                         }}
                     >
                         {pages.map((page) => (
-                            <Button
-                                key={page}
-                                onClick={handleCloseNavMenu}
-                                sx={{ my: 2, color: "white", display: "block" }}
-                            >
-                                {page}
-                            </Button>
+                            <Link key={page.title} to={page.url}>
+                                <Button
+                                    onClick={handleCloseNavMenu}
+                                    sx={{
+                                        my: 2,
+                                        color: "white",
+                                        display: "block",
+                                    }}
+                                >
+                                    {page.title}
+                                </Button>
+                            </Link>
                         ))}
                     </Box>
                     <Box sx={{ flexGrow: 0 }}>
@@ -213,13 +226,16 @@ const Navbar: React.FC = () => {
                                 </MenuItem>
                             ))}
                             <MenuItem
-                                    key='logout'
-                                    onClick={() => {handleCloseUserMenu(); handleLogout();}}
-                                >
-                                    <Typography sx={{ textAlign: "center" }}>
-                                        Logout
-                                    </Typography>
-                                </MenuItem>
+                                key="logout"
+                                onClick={() => {
+                                    handleCloseUserMenu();
+                                    handleLogout();
+                                }}
+                            >
+                                <Typography sx={{ textAlign: "center" }}>
+                                    Logout
+                                </Typography>
+                            </MenuItem>
                         </Menu>
                     </Box>
                 </Toolbar>
