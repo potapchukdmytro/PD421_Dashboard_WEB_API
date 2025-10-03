@@ -13,6 +13,7 @@ namespace PD421_Dashboard_WEB_API.BLL.MapperProfiles
 
             // CreateGameDto -> GameEntity
             CreateMap<CreateGameDto, GameEntity>()
+                .ForMember(dest => dest.ReleaseDate, opt => opt.MapFrom(src => src.ReleaseDate.ToUniversalTime()))
                 .ForMember(dest => dest.Images, opt => opt.Ignore())
                 .ForMember(dest => dest.Genres, opt => opt.Ignore());
 

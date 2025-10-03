@@ -15,3 +15,12 @@ export interface Game {
     mainImage: GameImage | null;
     images: GameImage[];
 }
+
+export interface CreateForm {
+    name: string;
+    description: string;
+    price: number;
+    releaseDate: string;
+    publisher: string;
+    developer :string;
+}

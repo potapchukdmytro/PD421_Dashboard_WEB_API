@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { loginSucess } from "./store/slices/authSlice";
 import { useDispatch } from "react-redux";
 import GameListPage from "./pages/gamePage/GameListPage";
+import CreateGamePage from "./pages/gamePage/CreateGamePage";
 
 function App() {
     const dispatch = useDispatch();
@@ -14,7 +15,7 @@ function App() {
     useEffect(() => {
         // read jwt token
         const token = localStorage.getItem("token");
-        if(token) {
+        if (token) {
             dispatch(loginSucess(token));
         }
     }, []);
@@ -25,7 +26,10 @@ function App() {
                 <Route path="/" element={<DefaultLayout />}>
                     <Route index element={<MainPage />} />
                     <Route path="/login" element={<LoginPage />} />
-                    <Route path="/game" element={<GameListPage />} />
+                    <Route path="/game">
+                        <Route index element={<GameListPage />} />
+                        <Route path="create" element={<CreateGamePage />} />
+                    </Route>
                 </Route>
             </Routes>
         </>
