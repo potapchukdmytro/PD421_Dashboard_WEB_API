@@ -22,5 +22,12 @@ namespace PD421_Dashboard_WEB_API.Controllers
             var response = await _authService.LoginAsync(dto);
             return this.ToActionResult(response);
         }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> RegisterAsync([FromBody] RegisterDto dto)
+        {
+            var response = await _authService.RegisterAsync(dto);
+            return this.ToActionResult(response);
+        }
     }
 }

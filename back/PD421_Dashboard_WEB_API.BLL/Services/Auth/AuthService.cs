@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -17,11 +18,13 @@ namespace PD421_Dashboard_WEB_API.BLL.Services.Auth
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly JwtSettings _jwtSettings;
+        private readonly IMapper _mapper;
 
-        public AuthService(UserManager<ApplicationUser> userManager, IOptions<JwtSettings> jwtOptions)
+        public AuthService(UserManager<ApplicationUser> userManager, IOptions<JwtSettings> jwtOptions, IMapper mapper)
         {
             _userManager = userManager;
             _jwtSettings = jwtOptions.Value;
+            _mapper = mapper;
         }
 
         private async Task<string> GenerateJwtTokenAsync(ApplicationUser user)
@@ -95,6 +98,60 @@ namespace PD421_Dashboard_WEB_API.BLL.Services.Auth
                 Message = "Успішний вхід",
                 Data = token
             };
+        }
+
+        public async Task<ServiceResponse> RegisterAsync(RegisterDto dto)
+        {
+            if(!await IsUniqueEmailAsync(dto.Email))
+            {
+                return new ServiceResponse
+                {
+                    IsSuccess = false,
+                    HttpStatusCode = HttpStatusCode.BadRequest,
+                    Message = $"Пошта {dto.Email} вже використовується"
+                };
+            }
+
+            if (!await IsUniqueUserNameAsync(dto.UserName))
+            {
+                return new ServiceResponse
+                {
+                    IsSuccess = false,
+                    HttpStatusCode = HttpStatusCode.BadRequest,
+                    Message = $"Ім'я користувача {dto.UserName} вже використовується"
+                };
+            }
+
+            var entity = _mapper.Map<ApplicationUser>(dto);
+
+            var result = await _userManager.CreateAsync(entity, dto.Password);
+
+            if(!result.Succeeded)
+            {
+                return new ServiceResponse
+                {
+                    IsSuccess = false,
+                    Message = result.Errors.First().Description,
+                    HttpStatusCode = HttpStatusCode.BadRequest
+                };
+            }
+
+            await _userManager.AddToRoleAsync(entity, "user");
+
+            return new ServiceResponse
+            {
+                Message = $"Користувач {dto.UserName} успішно зареєстрований"
+            };
+        }
+
+        private async Task<bool> IsUniqueEmailAsync(string email)
+        {
+            return !await _userManager.Users.AnyAsync(u => u.NormalizedEmail == email.ToUpper());
+        }
+
+        private async Task<bool> IsUniqueUserNameAsync(string userName)
+        {
+            return !await _userManager.Users.AnyAsync(u => u.NormalizedUserName == userName.ToUpper());
         }
     }
 }

@@ -57,23 +57,23 @@ const Navbar: React.FC = () => {
                     <AdbIcon
                         sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
                     />
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="a"
-                        href="#app-bar-with-responsive-menu"
-                        sx={{
-                            mr: 2,
-                            display: { xs: "none", md: "flex" },
-                            fontFamily: "monospace",
-                            fontWeight: 700,
-                            letterSpacing: ".3rem",
-                            color: "inherit",
-                            textDecoration: "none",
-                        }}
-                    >
-                        LOGO
-                    </Typography>
+                    <Link to="/" style={{ color: "white" }}>
+                        <Typography
+                            variant="h6"
+                            noWrap
+                            sx={{
+                                mr: 2,
+                                display: { xs: "none", md: "flex" },
+                                fontFamily: "monospace",
+                                fontWeight: 700,
+                                letterSpacing: ".3rem",
+                                color: "inherit",
+                                textDecoration: "none",
+                            }}
+                        >
+                            LOGO
+                        </Typography>
+                    </Link>
 
                     <Box
                         sx={{
@@ -189,13 +189,15 @@ const Navbar: React.FC = () => {
                                         Увійти
                                     </Button>
                                 </Link>
-                                <Button
-                                    sx={{ mx: 1 }}
-                                    color="secondary"
-                                    variant="contained"
-                                >
-                                    Зареєструватися
-                                </Button>
+                                <Link to="/register">
+                                    <Button
+                                        sx={{ mx: 1 }}
+                                        color="secondary"
+                                        variant="contained"
+                                    >
+                                        Зареєструватися
+                                    </Button>
+                                </Link>
                             </Box>
                         )}
 
