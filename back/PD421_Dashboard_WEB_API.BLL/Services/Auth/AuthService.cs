@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using PD421_Dashboard_WEB_API.BLL.Dtos.Auth;
+using PD421_Dashboard_WEB_API.BLL.Services.EmailService;
 using PD421_Dashboard_WEB_API.BLL.Settings;
 using PD421_Dashboard_WEB_API.DAL.Entitites.Identity;
 using System.IdentityModel.Tokens.Jwt;
@@ -17,14 +18,16 @@ namespace PD421_Dashboard_WEB_API.BLL.Services.Auth
     public class AuthService : IAuthService
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IEmailService _emailService;
         private readonly JwtSettings _jwtSettings;
         private readonly IMapper _mapper;
 
-        public AuthService(UserManager<ApplicationUser> userManager, IOptions<JwtSettings> jwtOptions, IMapper mapper)
+        public AuthService(UserManager<ApplicationUser> userManager, IOptions<JwtSettings> jwtOptions, IMapper mapper, IEmailService emailService)
         {
             _userManager = userManager;
             _jwtSettings = jwtOptions.Value;
             _mapper = mapper;
+            _emailService = emailService;
         }
 
         private async Task<string> GenerateJwtTokenAsync(ApplicationUser user)
@@ -138,6 +141,12 @@ namespace PD421_Dashboard_WEB_API.BLL.Services.Auth
 
             await _userManager.AddToRoleAsync(entity, "user");
 
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(entity);
+            var bytes = Encoding.UTF8.GetBytes(token);
+            string base64Token = Convert.ToBase64String(bytes);
+
+            await _emailService.SendEmailConfirmMessageAsync(entity.Email!, base64Token, entity.Id);
+
             return new ServiceResponse
             {
                 Message = $"Користувач {dto.UserName} успішно зареєстрований"
@@ -152,6 +161,41 @@ namespace PD421_Dashboard_WEB_API.BLL.Services.Auth
         private async Task<bool> IsUniqueUserNameAsync(string userName)
         {
             return !await _userManager.Users.AnyAsync(u => u.NormalizedUserName == userName.ToUpper());
+        }
+
+        public async Task<ServiceResponse> ConfirmEmailAsync(string userId, string token)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if(user == null)
+            {
+                return new ServiceResponse
+                {
+                    IsSuccess = false,
+                    Message = "Користувача не знайдено",
+                    HttpStatusCode = HttpStatusCode.NotFound
+                };
+            }
+
+            var bytes = Convert.FromBase64String(token);
+            var tokenDecoded = Encoding.UTF8.GetString(bytes);
+
+            var result = await _userManager.ConfirmEmailAsync(user, tokenDecoded);
+
+            if(!result.Succeeded)
+            {
+                return new ServiceResponse
+                {
+                    IsSuccess = false,
+                    Message = result.Errors.First().Description,
+                    HttpStatusCode = HttpStatusCode.BadRequest
+                };
+            }
+
+            return new ServiceResponse
+            {
+                Message = "Пошта успішно підтверджена"
+            };
         }
     }
 }

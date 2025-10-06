@@ -9,9 +9,13 @@ import { useDispatch } from "react-redux";
 import GameListPage from "./pages/gamePage/GameListPage";
 import CreateGamePage from "./pages/gamePage/CreateGamePage";
 import RegisterPage from "./pages/auth/RegisterPage";
+import ConfirmEmailPage from "./pages/auth/ConfirmEmailPage";
+import { useAppSelector } from "./hooks/reduxHooks";
+import NotFoundPage from "./pages/notFound/NotFoundPage";
 
 function App() {
     const dispatch = useDispatch();
+    const { user } = useAppSelector((state) => state.auth);
 
     useEffect(() => {
         // read jwt token
@@ -28,10 +32,17 @@ function App() {
                     <Route index element={<MainPage />} />
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
+                    <Route
+                        path="/confirmemail"
+                        element={<ConfirmEmailPage />}
+                    />
                     <Route path="/game">
                         <Route index element={<GameListPage />} />
-                        <Route path="create" element={<CreateGamePage />} />
+                        {user && user.roles.includes("admin") && (
+                            <Route path="create" element={<CreateGamePage />} />
+                        )}
                     </Route>
+                    <Route path="*" element={<NotFoundPage />} />
                 </Route>
             </Routes>
         </>

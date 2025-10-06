@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 using PD421_Dashboard_WEB_API.BLL.Services.Auth;
+using PD421_Dashboard_WEB_API.BLL.Services.EmailService;
 using PD421_Dashboard_WEB_API.BLL.Services.Game;
 using PD421_Dashboard_WEB_API.BLL.Services.Genre;
 using PD421_Dashboard_WEB_API.BLL.Services.Storage;
@@ -57,9 +57,11 @@ builder.Services.AddScoped<IGenreService, GenreService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IStorageService, StorageService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 // Add settings
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpSettings"));
 
 // CORS
 string corsName = "CorsAll";

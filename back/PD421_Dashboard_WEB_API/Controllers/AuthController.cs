@@ -29,5 +29,17 @@ namespace PD421_Dashboard_WEB_API.Controllers
             var response = await _authService.RegisterAsync(dto);
             return this.ToActionResult(response);
         }
+
+        [HttpGet("confirmemail")]
+        public async Task<IActionResult> ConfirmEmailAsync(string? userId, string? token)
+        {
+            if(string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
+            {
+                return BadRequest();
+            }
+
+            var response = await _authService.ConfirmEmailAsync(userId, token);
+            return this.ToActionResult(response);
+        }
     }
 }
