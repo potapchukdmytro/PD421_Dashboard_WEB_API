@@ -12,6 +12,8 @@ using PD421_Dashboard_WEB_API.DAL.Initializer;
 using PD421_Dashboard_WEB_API.DAL.Repositories.Game;
 using PD421_Dashboard_WEB_API.DAL.Repositories.Genre;
 using PD421_Dashboard_WEB_API.Infrastructure;
+using PD421_Dashboard_WEB_API.Middlewares;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +23,15 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Logging
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("logs/log_.txt", rollingInterval: RollingInterval.Hour)
+    .Enrich.FromLogContext()
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 // Add dbcontext
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -88,14 +99,18 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.UseCors(corsName);
+// Custom middlewares
+app.UseMiddleware<ExceptionHandleMiddleware>();
+//app.UseMiddleware<LoggerMiddleware>();
 
 // static files
 app.AddStaticFiles(app.Environment);
+
+app.UseCors(corsName);
+
+app.UseAuthorization();
+
+app.MapControllers();
 
 app.Seed();
 

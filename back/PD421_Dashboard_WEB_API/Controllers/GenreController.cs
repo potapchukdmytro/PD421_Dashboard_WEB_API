@@ -12,10 +12,12 @@ namespace PD421_Dashboard_WEB_API.Controllers
     public class GenreController : ControllerBase
     {
         private readonly IGenreService _genreService;
+        private readonly ILogger<GenreController> _logger;
 
-        public GenreController(IGenreService genreService)
+        public GenreController(IGenreService genreService, ILogger<GenreController> logger)
         {
             _genreService = genreService;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -53,6 +55,11 @@ namespace PD421_Dashboard_WEB_API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAsync(string? id)
         {
+            //_logger.LogInformation("=== Work get method. Genre controller ===");
+            //_logger.LogWarning("=== Warning get method. Genre controller ===");
+            //_logger.LogError("=== Error get method. Genre controller ===");
+            //_logger.LogCritical("=== Critical get method. Genre controller ===");
+
             if (string.IsNullOrEmpty(id))
             {
                 var response = await _genreService.GetAllAsync();
