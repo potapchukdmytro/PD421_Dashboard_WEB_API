@@ -4,7 +4,7 @@ import { useSearchParams } from "react-router";
 import { apiBaseUrl } from "../../env";
 
 const ConfirmEmailPage = () => {
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
 
     useEffect(() => {
         let url = apiBaseUrl + "/auth/confirmemail?";
