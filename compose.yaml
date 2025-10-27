@@ -6,6 +6,7 @@ services:
       - "5433:5432"
     environment:
       - "POSTGRES_PASSWORD=qwerty"
+      - "POSTGRES_DB=pd421_games_store"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
