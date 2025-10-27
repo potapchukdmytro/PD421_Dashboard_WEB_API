@@ -1,0 +1,42 @@
+services:
+  db:
+    image: postgres
+    container_name: db
+    ports:
+      - "5433:5432"
+    environment:
+      - "POSTGRES_PASSWORD=qwerty"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    volumes:
+      - db:/var/lib/postgresql
+    networks:
+      - pd421_gameshop
+
+  api:
+    image: potapchuk22/pd421_back
+    container_name: api
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "5000:8080"
+    volumes:
+      - api:/app/storage
+    networks:
+      - pd421_gameshop
+
+networks:
+  pd421_gameshop:
+    name: "pd421_gameshop"
+
+volumes:
+  db:
+    driver: local
+    name: "db"
+  api:
+    driver: local
+    name: "api"
