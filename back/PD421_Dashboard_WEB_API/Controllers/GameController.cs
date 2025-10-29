@@ -35,5 +35,16 @@ namespace PD421_Dashboard_WEB_API.Controllers
             return this.ToActionResult(response);
         }
 
+        [HttpPut]
+        public async Task<IActionResult> UpdateAsync()
+        {
+            return Ok();
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAsync()
+        {
+            return Ok();
+        }
     }
 }
