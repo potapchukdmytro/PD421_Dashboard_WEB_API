@@ -35,6 +35,12 @@ namespace PD421_Dashboard_WEB_API.Controllers
             return this.ToActionResult(response);
         }
 
+        [HttpGet("by-id")]
+        public async Task<IActionResult> GetByIdAsync(string id)
+        {
+            return Ok();
+        }
+
         [HttpPut]
         public async Task<IActionResult> UpdateAsync()
         {

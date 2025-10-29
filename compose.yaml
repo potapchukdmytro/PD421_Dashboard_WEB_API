@@ -18,6 +18,7 @@ services:
       - pd421_gameshop
 
   api:
+    build: back/
     image: potapchuk22/pd421_back
     container_name: api
     depends_on:
