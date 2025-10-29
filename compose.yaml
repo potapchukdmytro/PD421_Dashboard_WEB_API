@@ -21,6 +21,8 @@ services:
     build: back/
     image: potapchuk22/pd421_back
     container_name: api
+    environment:
+      - ConnectionStrings__DefaultDb=User ID=postgres;Password=qwerty;Host=db;Port=5432;Database=pd421_games_store;
     depends_on:
       db:
         condition: service_healthy
