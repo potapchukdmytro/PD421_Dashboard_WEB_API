@@ -6,16 +6,12 @@ COPY package*.json .
 
 RUN npm ci
 
+RUN npm i -g serve
+
 COPY . .
 
 RUN npm run build
 
-FROM caddy:2-alpine
+EXPOSE 5173
 
-COPY --from=build /app/dist /usr/share/caddy
-
-# http
-EXPOSE 80
-
-# https
-EXPOSE 443
+CMD [ "serve", "-s", "dist", "-p", "5173" ]
