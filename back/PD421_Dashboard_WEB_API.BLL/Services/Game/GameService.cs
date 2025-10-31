@@ -91,5 +91,22 @@ namespace PD421_Dashboard_WEB_API.BLL.Services.Game
                 Data = dtos
             };
         }
+
+        public async Task<ServiceResponse> GetByGenreAsync(string genre)
+        {
+            var entites = await _gameRepository.Games
+                .Include(g => g.Images)
+                .Include(g => g.Genres)
+                .Where(g => g.Genres.Any(ge => ge.NormalizedName == genre.ToUpper()))
+                .ToListAsync();
+
+            var dtos = _mapper.Map<List<GameDto>>(entites);
+
+            return new ServiceResponse
+            {
+                Message = $"Ігри жанру '{genre}' отримано",
+                Data = dtos
+            };
+        }
     }
 }
