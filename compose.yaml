@@ -34,7 +34,11 @@ services:
       - pd421_gameshop
 
   front:
-    build: front/
+    build:
+      context: front/
+      args:
+        - API_URL=http://localhost:5000/api
+        - IMAGES_URL=http://localhost:5000/images
     image: potapchuk22/pd421_front
     container_name: front
     depends_on:
