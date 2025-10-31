@@ -18,9 +18,9 @@ import { useDispatch } from "react-redux";
 import { logout } from "../../store/slices/authSlice";
 
 const pages = [
-    { title: "Games", url: "/game" },
-    { title: "Pricing", url: "/" },
-    { title: "Blog", url: "/" },
+    { title: "Ігри", url: "/game" },
+    { title: "Жанри", url: "/genre" },
+    { title: "Блог", url: "/" },
 ];
 const settings = ["Profile", "Account", "Dashboard"];
 
