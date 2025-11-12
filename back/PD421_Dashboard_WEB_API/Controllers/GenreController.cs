@@ -53,23 +53,23 @@ namespace PD421_Dashboard_WEB_API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAsync(string? id)
+        public async Task<IActionResult> GetAsync()
         {
-            //_logger.LogInformation("=== Work get method. Genre controller ===");
-            //_logger.LogWarning("=== Warning get method. Genre controller ===");
-            //_logger.LogError("=== Error get method. Genre controller ===");
-            //_logger.LogCritical("=== Critical get method. Genre controller ===");
+            var response = await _genreService.GetAllAsync();
+            return this.ToActionResult(response);
+        }
 
-            if (string.IsNullOrEmpty(id))
-            {
-                var response = await _genreService.GetAllAsync();
-                return this.ToActionResult(response);
-            }
-            else
-            {
-                var response = await _genreService.GetByIdAsync(id);
-                return this.ToActionResult(response);
-            }
+        [HttpGet("by-name")]
+        public async Task<IActionResult> GetByNameAsync(string name)
+        {
+            return Ok();
+        }
+
+        [HttpGet("by-id")]
+        public async Task<IActionResult> GetByIdAsync(string id)
+        {
+            var response = await _genreService.GetByIdAsync(id);
+            return this.ToActionResult(response);
         }
     }
 }
