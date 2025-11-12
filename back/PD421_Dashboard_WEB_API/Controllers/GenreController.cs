@@ -71,11 +71,5 @@ namespace PD421_Dashboard_WEB_API.Controllers
             var response = await _genreService.GetByIdAsync(id);
             return this.ToActionResult(response);
         }
-
-        [HttpGet("by-name")]
-        public async Task<IActionResult> GetByNameAsync(string? name)
-        {
-            return Ok();
-        }
     }
 }
